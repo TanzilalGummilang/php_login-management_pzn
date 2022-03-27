@@ -9,8 +9,8 @@ class HomeController
   function index(): void
   {
     $model = [
-      "title" => "Belajar PHP MVC",
-      "content" => "Selamat Belajar dan Puyeng wkwkw"
+      "title" => "Belajar PHP Login Management",
+      "content" => "Selamat Belajar PHP Studi Kasus Web Login Management"
     ];
 
     View::render('Home/index', $model);
