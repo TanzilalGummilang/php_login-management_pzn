@@ -2,6 +2,7 @@
 
 namespace TanzilalGummilang\PHP\LoginManagement\App;
 
+
 class Router
 {
   private static array $routes = [];
