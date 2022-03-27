@@ -1,7 +1,6 @@
 <?php
 
 namespace TanzilalGummilang\PHP\LoginManagement\Controller;
-
 use TanzilalGummilang\PHP\LoginManagement\App\View;
 
 class HomeController
