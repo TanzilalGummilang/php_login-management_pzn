@@ -1,0 +1,2 @@
+- Domain = representasi dari table di database
+- Repository = semua aksi yg berhubungan dgn database
