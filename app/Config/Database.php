@@ -1,8 +1,8 @@
 <?php
 
 namespace TanzilalGummilang\PHP\LoginManagement\Config;
-
 use PDO;
+
 
 class Database
 {
