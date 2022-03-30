@@ -1,2 +1,4 @@
 - Domain = representasi dari table di database
 - Repository = semua aksi yg berhubungan dgn database
+- Service = semua bisnis logic
+- Model = data value parameter atau return value nya (bisa juga disebut Data Tranfer Object (DTO))
