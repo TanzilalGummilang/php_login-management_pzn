@@ -1,4 +1,13 @@
-- Domain = representasi dari table di database
-- Repository = semua aksi yg berhubungan dgn database
-- Service = semua bisnis logic
-- Model = data value parameter atau return value nya (bisa juga disebut Data Tranfer Object (DTO))
+# Controller 
+## menerima request dari user dan menyampaikan ke model dan service
+## lalu mengembalikan response ke user dgn tampilan dari view
+
+# Domain = representasi dari table di database
+# Repository = semua aksi yg berhubungan dgn database
+
+# Service = semua bisnis logic
+# Model = data value parameter dan return value dari Service (bisa juga disebut Data Transfer Object (DTO))
+
+# UserController
+## function register = untuk tampilan awal registrasi
+## function postRegister = aksi register (perlu service dan model)
