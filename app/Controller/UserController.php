@@ -5,6 +5,7 @@ namespace TanzilalGummilang\PHP\LoginManagement\Controller;
 use TanzilalGummilang\PHP\LoginManagement\App\View;
 use TanzilalGummilang\PHP\LoginManagement\Config\Database;
 use TanzilalGummilang\PHP\LoginManagement\Exception\ValidationException;
+use TanzilalGummilang\PHP\LoginManagement\Model\UserLoginRequest;
 use TanzilalGummilang\PHP\LoginManagement\Model\UserRegisterRequest;
 use TanzilalGummilang\PHP\LoginManagement\Repository\UserRepository;
 use TanzilalGummilang\PHP\LoginManagement\Service\UserService;
@@ -21,6 +22,7 @@ class UserController
     $this->userService = new UserService($userRepository);
   }
 
+  // register view
   public function register()
   {
     View::render('User/register', [
@@ -45,5 +47,31 @@ class UserController
       ]);
     }
   }
+  // end register view
 
+  // login view
+  public function login()
+  {
+    View::render('User/login', [
+      'title' => "Login User"
+    ]);
+  }
+
+  public function postLogin()
+  {
+    $request = new UserLoginRequest;
+    $request->id = $_POST['id'];
+    $request->password = $_POST['password'];
+
+    try{
+      $this->userService->login($request);
+      View::redirect("/");
+    }catch(ValidationException $exception){
+      View::render('User/login', [
+        'title' => "Login user",
+        'error' => $exception->getMessage()
+      ]);
+    }
+  }
+  // end login view
 }

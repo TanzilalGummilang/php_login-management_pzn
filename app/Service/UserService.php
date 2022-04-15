@@ -76,7 +76,7 @@ class UserService
   private function validateUserLoginRequest(UserLoginRequest $request)
   {
     if($request->id == null or $request == null or trim($request->id == "") or trim($request->password == "")){
-      throw new ValidationException("Id and Password cannot blank !!");
+      throw new ValidationException("Id or Password cannot blank !!");
     }
   }
   // end login
