@@ -1,6 +1,13 @@
 <?php
 
-namespace TanzilalGummilang\PHP\LoginManagement\Controller;
+namespace TanzilalGummilang\PHP\LoginManagement\App {
+
+  function header(string $value){
+    echo $value;
+  }
+}
+
+namespace TanzilalGummilang\PHP\LoginManagement\Controller {
 
 use PHPUnit\Framework\TestCase;
 use TanzilalGummilang\PHP\LoginManagement\Config\Database;
@@ -18,6 +25,8 @@ class UserControllerTest extends TestCase
     $this->userController = new UserController;
     $this->userRepository = new UserRepository(Database::getConnection());
     $this->userRepository->deleteAll();
+
+    putenv("mode=test");
   }
 
   // register view test
@@ -38,7 +47,10 @@ class UserControllerTest extends TestCase
     $_POST['name'] = "Tanzilal Gummilang";
     $_POST['password'] = "rahasia";
 
-    $this->expectOutputString("");
+    $this->userController->postRegister();
+
+    // $this->expectOutputString("");
+    $this->expectOutputRegex("[Location: /users/login]");
   }
 
   public function testPostRegisterValidationError()
@@ -110,17 +122,43 @@ class UserControllerTest extends TestCase
 
   public function testLoginValidationError()
   {
+    $_POST['id'] = "";
+    $_POST['password'] = "";
 
-  }
+    $this->userController->postLogin();
 
-  public function testLoginWrongPassword()
-  {
-
+    $this->expectOutputRegex("[Login User]");
+    $this->expectOutputRegex("[Id or Password cannot blank !!]");
   }
 
   public function testLoginUserNotFound()
   {
+    $_POST['id'] = "notFound";
+    $_POST['password'] = "notFound";
 
+    $this->userController->postLogin();
+
+    $this->expectOutputRegex("[Login User]");
+    $this->expectOutputRegex("[Id or Password wrong !!]");
+  }
+
+  public function testLoginWrongPassword()
+  {
+    $user = new User;
+    $user->id = "tanzilal";
+    $user->name = "Tanzilal Gummilang";
+    $user->password = password_hash("rahasia", PASSWORD_BCRYPT);
+
+    $this->userRepository->save($user);
+
+    $_POST['id'] = "tanzilal";
+    $_POST['password'] = "salahpassword";
+
+    $this->userController->postLogin();
+
+    $this->expectOutputRegex("[Password or Id wrong !!]");
   }
   // end login view test
+}
+
 }

@@ -11,4 +11,4 @@
 # UserController
 ## function register = untuk tampilan awal registrasi
 ## function postRegister = aksi register (perlu service dan model)
-## unittest eps261, masalah view redirect header, di tutor error dan harus ada penyesuaian, di urg lancar 
+## unittest eps261, masalah view redirect header, di tutor error dan harus ada penyesuaian, di urg lancar (salah salah urg hampura wkwk nu ieu hungkul)
