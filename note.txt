@@ -1,6 +1,7 @@
-# Controller 
-## menerima request dari user dan menyampaikan ke model dan service
-## lalu mengembalikan response ke user dgn tampilan dari view
+# Controller {
+  ## menerima request dari user dan menyampaikan ke model dan service
+  ## lalu mengembalikan response ke user dgn tampilan dari view 
+}
 
 # Domain = representasi dari table di database
 # Repository = semua aksi yg berhubungan dgn database
@@ -8,7 +9,23 @@
 # Service = semua bisnis logic
 # Model = data value parameter dan return value dari Service (bisa juga disebut Data Transfer Object (DTO))
 
-# UserController
-## function register = untuk tampilan awal registrasi
-## function postRegister = aksi register (perlu service dan model)
-## unittest eps261, masalah view redirect header, di tutor error dan harus ada penyesuaian, di urg lancar (salah salah urg hampura wkwk nu ieu hungkul)
+# UserController {
+  ## function register = untuk tampilan awal registrasi
+  ## function postRegister = aksi register (perlu service dan model)
+}
+
+# SessionRepository {
+  ## langkah-langkah {
+    1. Domain {
+      - buat Domain representasi dari session
+    }
+    2. SessionRepository {
+      - create/insert data session
+      - delete session (setelah logout)
+      - cek session, select sesssion berdasarkan id
+      - delete semua session utk unittest
+      - buat connection ke database dan constructornya
+    }
+    3. buat unit test nya
+  }
+}
