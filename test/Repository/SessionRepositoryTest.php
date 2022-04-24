@@ -2,20 +2,31 @@
 
 namespace TanzilalGummilang\PHP\LoginManagement\Repository;
 
-use LDAP\Result;
 use PHPUnit\Framework\TestCase;
 use TanzilalGummilang\PHP\LoginManagement\Config\Database;
 use TanzilalGummilang\PHP\LoginManagement\Domain\Session;
+use TanzilalGummilang\PHP\LoginManagement\Domain\User;
 
 
 class SessionRepositoryTest extends TestCase
 {
+  private UserRepository $userRepository;
   private SessionRepository $sessionRepository;
 
   protected function setUp(): void
   {
+    $this->userRepository = new UserRepository(Database::getConnection());
     $this->sessionRepository = new SessionRepository(Database::getConnection());
+
     $this->sessionRepository->deleteAll();
+    $this->userRepository->deleteAll();
+
+    $user = new User;
+    $user->id = "tanzilal";
+    $user->name = "Tanzilal Gummilang";
+    $user->password = "rahasia";
+
+    $this->userRepository->save($user);
   }
 
   public function testSaveSuccess()

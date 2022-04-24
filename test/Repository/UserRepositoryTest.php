@@ -9,6 +9,7 @@ use TanzilalGummilang\PHP\LoginManagement\Domain\User;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertNull;
 
+
 class UserRepositoryTest extends TestCase
 {
   private UserRepository $userRepository;
@@ -28,7 +29,7 @@ class UserRepositoryTest extends TestCase
 
     $this->userRepository->save($user);
 
-    $result = $this->userRepository->findByID($user->id);
+    $result = $this->userRepository->findById($user->id);
 
     assertEquals($user->id, $result->id);
     assertEquals($user->name, $result->name);
@@ -37,7 +38,7 @@ class UserRepositoryTest extends TestCase
 
   public function testFindByIdNotFound()
   {
-    $user = $this->userRepository->findByID("notfound");
+    $user = $this->userRepository->findById("notfound");
     assertNull($user);
   }
 }

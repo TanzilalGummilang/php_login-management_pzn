@@ -48,7 +48,7 @@ class UserService
       throw new ValidationException("Id, Name, Password cannot blank !!");
     }
 
-    $user = $this->userRepository->findByID($request->id);
+    $user = $this->userRepository->findById($request->id);
     if($user != null){
       throw new ValidationException("User Id already exist");
     }
@@ -60,7 +60,7 @@ class UserService
   {
     $this->validateUserLoginRequest($request);
 
-    $user = $this->userRepository->findByID($request->id);
+    $user = $this->userRepository->findById($request->id);
     if($user == null){
       throw new ValidationException("Id or Password wrong !!");
     }

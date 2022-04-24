@@ -29,3 +29,21 @@
     3. buat unit test nya
   }
 }
+
+# SessionService {
+  ## mengikuti format session {
+    - setelah login session dibuat
+    - setelah logout session dihapus
+    - kadang2 kita ingin tau session saat ini
+  }
+  ## jadi yg akan dibuat adalah {
+    - create/buat session
+    - destroy/hapus session
+    - current = session saat ini
+    - constructor utk SessionRepository
+    - pake cookie utk simpan data session id (session php agak bermasalah (materi php web))
+    - unit test nya, bikin dummy setcookie (error cannot modify header)
+  }
+  ## setelah delete cookie dari database, cookie perlu diubah lagi, cookie tidak otomatis hilang
+  ## pada unit test, function setUp(), function deleteAll() urutannya jgn ketuker, alasannya belum ketemu masih dipelajari logic nya hehe..
+}
