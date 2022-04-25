@@ -7,19 +7,25 @@ use TanzilalGummilang\PHP\LoginManagement\Config\Database;
 use TanzilalGummilang\PHP\LoginManagement\Exception\ValidationException;
 use TanzilalGummilang\PHP\LoginManagement\Model\UserLoginRequest;
 use TanzilalGummilang\PHP\LoginManagement\Model\UserRegisterRequest;
+use TanzilalGummilang\PHP\LoginManagement\Repository\SessionRepository;
 use TanzilalGummilang\PHP\LoginManagement\Repository\UserRepository;
+use TanzilalGummilang\PHP\LoginManagement\Service\SessionService;
 use TanzilalGummilang\PHP\LoginManagement\Service\UserService;
 
 
 class UserController
 {
   private UserService $userService;
+  private SessionService $sessionService;
 
   public function __construct()
   {
     $connection = Database::getConnection();
     $userRepository = new UserRepository($connection);
     $this->userService = new UserService($userRepository);
+
+    $sessionRepository = new SessionRepository($connection);
+    $this->sessionService = new SessionService($sessionRepository, $userRepository);
   }
 
   // register view
@@ -64,7 +70,8 @@ class UserController
     $request->password = $_POST['password'];
 
     try{
-      $this->userService->login($request);
+      $response = $this->userService->login($request);
+      $this->sessionService->create($response->user->id);
       View::redirect("/");
     }catch(ValidationException $exception){
       View::render('User/login', [

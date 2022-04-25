@@ -42,8 +42,26 @@
     - current = session saat ini
     - constructor utk SessionRepository
     - pake cookie utk simpan data session id (session php agak bermasalah (materi php web))
-    - unit test nya, bikin dummy setcookie (error cannot modify header)
+    - unit test nya, bikin dummy setcookie karena ini sama seperti menambah header (error cannot modify header), penjelasan error tsb ada di eps 261 Unit Test User Registation Controller dimulai menit ke 6:02
   }
   ## setelah delete cookie dari database, cookie perlu diubah lagi, cookie tidak otomatis hilang
-  ## pada unit test, function setUp(), function deleteAll() urutannya jgn ketuker, alasannya belum ketemu masih dipelajari logic nya hehe..
+  ## pada unit test, function setUp(), function deleteAll() urutannya jgn ketuker, alasannya karena di SessionRepository ada foreign key ke userRepository, kondisi ini berlaku utk ke depannya juga.
+}
+
+# Login Session {
+  ## UserController {
+    - setelah login, kita akan redirect ke halaman dasboardnya, tapi session service belum dipanggil, jadi diclass ini kita panggil SessionService nya
+    - postLogin: setelah login, sebelum redirect, setcookie/create terlebih dahulu
+  }
+  ## HomeController {
+    - jika selesai login maka akan di redirect kesini,
+    - maka perlu beberapa pengecekan terlebih dahulu disini, jika belum pernah login berarti masih akun guest (home/index), jika pernah login maka tampilkan dashboard (home/dashboard)
+  }
+  ## bikin HomeControllerTest
+  ## update UserControllerTest {
+    - error 'intrgrity constraint bla..bla..' karena ada data di tabel session
+    - perlu menambahkan SessionRepository
+    - setelah menambahkan lalu di running, akan terjadi error di testLoginSuccess (error cannot modify header bla..bla..)
+    - maka perlu dummy setcookie seperti di SessionService
+  }
 }

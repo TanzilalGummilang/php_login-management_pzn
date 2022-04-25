@@ -33,7 +33,7 @@ class SessionServiceTest extends TestCase
     $user = new User;
     $user->id = "tanzilal";
     $user->name = "Tanzilal Gummilang";
-    $user->password = "rahasia";
+    $user->password = password_hash("rahasia", PASSWORD_BCRYPT);
     $this->userRepository->save($user);
   }
 
