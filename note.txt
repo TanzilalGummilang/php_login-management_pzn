@@ -65,3 +65,12 @@
     - maka perlu dummy setcookie seperti di SessionService
   }
 }
+
+# Logout {
+  ## UserController {
+    - bikin function logout, isinya destroy cookie, lalu redirect ke halaman home atau login juga boleh 
+  }
+  ## public/index.php {
+    - tambah route logout, methodnya GET karena pake link
+  }
+}

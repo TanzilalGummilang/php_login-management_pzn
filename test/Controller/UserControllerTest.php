@@ -19,10 +19,11 @@ namespace TanzilalGummilang\PHP\LoginManagement\Controller {
 
   use PHPUnit\Framework\TestCase;
   use TanzilalGummilang\PHP\LoginManagement\Config\Database;
-  use TanzilalGummilang\PHP\LoginManagement\Domain\User;
+    use TanzilalGummilang\PHP\LoginManagement\Domain\Session;
+    use TanzilalGummilang\PHP\LoginManagement\Domain\User;
   use TanzilalGummilang\PHP\LoginManagement\Repository\SessionRepository;
   use TanzilalGummilang\PHP\LoginManagement\Repository\UserRepository;
-
+    use TanzilalGummilang\PHP\LoginManagement\Service\SessionService;
 
   class UserControllerTest extends TestCase
   {
@@ -174,6 +175,29 @@ namespace TanzilalGummilang\PHP\LoginManagement\Controller {
       $this->expectOutputRegex("[Password or Id wrong !!]");
     }
     // end login view test
+
+    // logout test
+    public function testLogout()
+    {
+      $user = new User;
+      $user->id = "tanzilal";
+      $user->name = "Tanzilal Gummilang";
+      $user->password = password_hash("rahasia", PASSWORD_BCRYPT);
+      $this->userRepository->save($user);
+
+      $session = new Session;
+      $session->id = uniqid();
+      $session->userId = $user->id;
+      $this->sessionRepository->save($session);
+
+      $_COOKIE[SessionService::$COOKIE_NAME] = $session->id;
+
+      $this->userController->logout();
+
+      $this->expectOutputRegex("[Location: /]");
+      $this->expectOutputRegex("[X-PZN-SESSION: ]");
+    }
+    // end logout test
   }
 
 }
