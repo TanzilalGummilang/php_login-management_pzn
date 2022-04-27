@@ -74,3 +74,18 @@
     - tambah route logout, methodnya GET karena pake link
   }
 }
+
+# Middleware {
+  ## pake Middleware karena utk mengecek, jika user sudah login maka tidak boleh login kembali atau registrasi kembali, harus logout terlebih dahulu, dan akan diredirect ke dashboard jika user tetap memaksa login atau registrasi kembali melalui url. begitupun jika user belum login tidak boleh logout.
+  ## MustLoginMiddleware {
+    - artinya harus login terlebih dahulu
+    - jika ada pemaksaan masuk tanpa login, maka akan di redirect ke index awal atau hal login 
+  }
+  ## MustNotLoginMiddleware {
+    - maksudnya keadaan sudah login
+    - jika ada pemaksaan pake fitur yg diharuskan logout terlebih dahulu misalnya registrasi atau login kembali, maka akan di redirect ke hal dashboard
+  }
+  ## public/index.php {
+    - tambah Middleware di tiap route yg diperlukan
+  }
+}

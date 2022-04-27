@@ -19,11 +19,12 @@ namespace TanzilalGummilang\PHP\LoginManagement\Controller {
 
   use PHPUnit\Framework\TestCase;
   use TanzilalGummilang\PHP\LoginManagement\Config\Database;
-    use TanzilalGummilang\PHP\LoginManagement\Domain\Session;
-    use TanzilalGummilang\PHP\LoginManagement\Domain\User;
+  use TanzilalGummilang\PHP\LoginManagement\Domain\Session;
+  use TanzilalGummilang\PHP\LoginManagement\Domain\User;
   use TanzilalGummilang\PHP\LoginManagement\Repository\SessionRepository;
   use TanzilalGummilang\PHP\LoginManagement\Repository\UserRepository;
-    use TanzilalGummilang\PHP\LoginManagement\Service\SessionService;
+  use TanzilalGummilang\PHP\LoginManagement\Service\SessionService;
+  
 
   class UserControllerTest extends TestCase
   {
