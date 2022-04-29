@@ -89,3 +89,33 @@
     - tambah Middleware di tiap route yg diperlukan
   }
 }
+
+# User Profile Update Repository {
+  # UserRepository {
+    - bikin function update berparameter User dan return User
+    - function update ini akan dipakai utk update profile dan update password
+  }
+  # UserRepositoryTest {
+    - update UserRepositoryTest
+    - bikin testUpdate
+    - perlu SessionRepository agar tidak error
+  }
+}
+
+# User Profile Update Service {
+  # UserService {
+    - bikin function updateProfile
+    - bikin model request dan return valuenya, utk parameter dan return value dari function updateProfile
+    - bikin function validation nya
+    - function updateProfile pake database transactional {
+      1. masukin validasi dulu
+      2. pake try catch
+      3. isi try: beginTransaction, findById, update, commitTransaction, return response
+      4. isi catch: exception, rollbackTransaction, throw exception
+    }
+  }
+  # UserServiceTest {
+    - testUpdateSuccess, testUpdateValidationError, testUpdateNotFound
+    - 
+  }
+}

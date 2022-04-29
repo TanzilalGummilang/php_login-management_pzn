@@ -8,6 +8,8 @@ use TanzilalGummilang\PHP\LoginManagement\Domain\User;
 use TanzilalGummilang\PHP\LoginManagement\Exception\ValidationException;
 use TanzilalGummilang\PHP\LoginManagement\Model\UserLoginRequest;
 use TanzilalGummilang\PHP\LoginManagement\Model\UserLoginResponse;
+use TanzilalGummilang\PHP\LoginManagement\Model\UserProfileUpdateRequest;
+use TanzilalGummilang\PHP\LoginManagement\Model\UserProfileUpdateResponse;
 use TanzilalGummilang\PHP\LoginManagement\Model\UserRegisterRequest;
 use TanzilalGummilang\PHP\LoginManagement\Model\UserRegisterResponse;
 use TanzilalGummilang\PHP\LoginManagement\Repository\UserRepository;
@@ -44,7 +46,7 @@ class UserService
 
   private function validateUserRegistrationRequest(UserRegisterRequest $request)
   {
-    if($request->id == null or $request->name == null or $request == null or trim($request->id == "") or trim($request->name == "") or trim($request->password == "")){
+    if($request->id == null or $request->name == null or $request->password == null or trim($request->id == "") or trim($request->name == "") or trim($request->password == "")){
       throw new ValidationException("Id, Name, Password cannot blank !!");
     }
 
@@ -77,9 +79,45 @@ class UserService
 
   private function validateUserLoginRequest(UserLoginRequest $request)
   {
-    if($request->id == null or $request == null or trim($request->id == "") or trim($request->password == "")){
+    if($request->id == null or $request->password == null or trim($request->id == "") or trim($request->password == "")){
       throw new ValidationException("Id or Password cannot blank !!");
     }
   }
   // end login
+
+  // update profile
+  public function updateProfile(UserProfileUpdateRequest $request): UserProfileUpdateResponse
+  {
+    $this->validateUserProfileUpdateRequest($request);
+
+    try{
+      Database::beginTransaction();
+
+      $user = $this->userRepository->findById($request->id);
+      if($user == null){
+        throw new ValidationException("User not found");
+      }
+
+      $user->name = $request->name;
+      $this->userRepository->update($user);
+
+      Database::commitTransaction();
+
+      $response = new UserProfileUpdateResponse;
+      $response->user = $user;
+      return $response;
+      
+    }catch(Exception $exception){
+      Database::rollbackTransaction();
+      throw $exception;
+    }
+  }
+
+  private function validateUserProfileUpdateRequest(UserProfileUpdateRequest $request)
+  {
+    if($request->id == null or $request->name == null or trim($request->id == "") or trim($request->name == "")){
+      throw new ValidationException("Id or Name cannot blank !!");
+    }
+  }
+  // end update profile
 }

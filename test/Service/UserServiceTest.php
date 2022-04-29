@@ -7,6 +7,7 @@ use TanzilalGummilang\PHP\LoginManagement\Config\Database;
 use TanzilalGummilang\PHP\LoginManagement\Domain\User;
 use TanzilalGummilang\PHP\LoginManagement\Exception\ValidationException;
 use TanzilalGummilang\PHP\LoginManagement\Model\UserLoginRequest;
+use TanzilalGummilang\PHP\LoginManagement\Model\UserProfileUpdateRequest;
 use TanzilalGummilang\PHP\LoginManagement\Model\UserRegisterRequest;
 use TanzilalGummilang\PHP\LoginManagement\Repository\UserRepository;
 
@@ -127,4 +128,47 @@ class UserServiceTest extends TestCase
     $this->assertTrue(password_verify($request->password, $response->user->password));
   }
   // end login test
+
+  // update test
+  public function testUpdateSuccess()
+  {
+    $user = new User;
+    $user->id = "tanzilal";
+    $user->name = "Tanzilal Gummilang";
+    $user->password = password_hash("rahasia", PASSWORD_BCRYPT);
+    $this->userRepository->save($user);
+
+    $request = new UserProfileUpdateRequest;
+    $request->id = $user->id;
+    $request->name = "Gummilang Tanzilal";
+
+    $this->userService->updateProfile($request);
+
+    $result = $this->userRepository->findById($request->id);
+
+    self::assertEquals($request->name, $result->name);
+  }
+
+  public function testUpdateValidationError()
+  {
+    $this->expectException(ValidationException::class);
+
+    $request = new UserProfileUpdateRequest;
+    $request->id = "";
+    $request->name = "";
+
+    $this->userService->updateProfile($request);
+  }
+
+  public function testUpdateNotFound()
+  {
+    $this->expectException(ValidationException::class);
+
+    $request = new UserProfileUpdateRequest;
+    $request->id = "tanzilal";
+    $request->name = "Gummilang Tanzilal";
+
+    $this->userService->updateProfile($request);
+  }
+  // end update test
 }
