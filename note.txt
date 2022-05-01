@@ -116,6 +116,112 @@
   }
   # UserServiceTest {
     - testUpdateSuccess, testUpdateValidationError, testUpdateNotFound
-    - 
   }
 }
+
+# User Profile Update Controller {
+  ## UserController {
+    - bikin function updateProfile dan postUpdateProfile
+  }
+  ## updateProfile {
+      - isinya render
+      - panggil sessionService->current sebelum render utk ambil data user $model, datanya yaitu 'title => ...', 'user => id, name'
+  }
+  ## bikin View/User/profile.php {
+    - copas dari template
+    - copas alert message
+    - id: disabled, value dari $model 
+    - name: value dari $model
+  }
+  ## public/index {
+    - tambah: route '/users/profile', method 'get', function 'updateProfile', 'MustLoginMiddleware'
+    - tambah: route '/users/profile', method 'post', function 'postUpdateProfile', 'MustLoginMiddleware' (dilakukan setelah beres postUpdateProfile)
+  }
+  ## postUpdateProfile {
+    - bikin objek dari UserProfileUpdateRequest, masukan ke variable $UserProfileUpdateRequest
+    - instansiasi {
+      -- id: ambil dari current(), maka panggil dulu sessionService->current(), karena jika pake post seperti yg name maka akan bisa rubah user orang ?? coba cari tau penjelasan dan buktinya
+      -- name: ambil dari name di form update profile dengan method post
+    }
+    - panggil updateProfile(), tapi pake try catch {
+      -- try: isinya userService->updateProfie, lalu redirect ke dashboard
+      -- catch: isinya exception, lalu kembalikan ke halaman yg sekarang (update profile) dan selipkan exception->getMessage() nya
+    }
+  }
+}
+
+# unit test User Profile Update Controller, UserControllerTest {
+  ## testUpdateProfile {
+    - bikin user dulu lalu save
+    - bikin session dulu lalu save, karena harus login dulu
+    - masukan id ke session cookie
+    - panggil updateProfile()
+    - test expectOutputRegex() nya, yaitu kata-kata yg harus muncul di tampilan update profile
+  }
+  ## testPostUpdateProfileSuccess {
+    - bikin user dulu lalu save
+    - bikin session dulu lalu save, karena harus login dulu
+    - masukan id ke session cookie
+    - masukan nama yg baru yg akan di update pake method post
+    - panggil postUpdateProfile()
+    - test expectOutputRegex(), nya yaitu harus redirect dashboard
+    - lalu cek ke db pake findById
+    - test assertEquals() namanya
+  }
+  ## testPostUpdateProfileValidationError {
+    - bikin user dulu lalu save
+    - bikin session dulu lalu save, karena harus login dulu
+    - masukan id ke session cookie
+    - masukan nama string kosong (yg membuat gagal) yg akan di update pake method post
+    - panggil postUpdateProfile()
+    - test expectOutputRegex() nya, termasuk yg id and name cannot blank
+  }
+}
+
+# User Password Update Service {
+  ## UserService {
+    - updatePassword() {
+      -- perlu request dan response modelnya, 
+      request: id, old password, new password, boleh null semua
+      response: User
+      -- validasi dulu
+      -- pake database transaction try catch
+      -- try: begin, findById dimasukan ke variable $user, cek usernya kalo gaada throw new validasiexception, cek password request dgn password di database jika tidak sama throw new validasiexception, instansiasi password baru ke userRepository, update(user), commit, bikin objek dimasukan ke variable $response, user dgn password baru dimasukan ke response->user, return responsenya.
+      -- catch: pake Exception, rollback, throw exception
+    }
+    - validateUserPasswordUpdateRequest() {
+      -- parameternya request yg diatas tadi
+      -- isinya hampir sama kaya validasi validasi sebelumnya
+    }
+  }
+}
+
+# unit test User Password Update Service, UserServiceTest {
+  ## testUpdatePasswordSuccess {
+    - bikin user lalu save
+    - bikin objek requestnya, lalu instansiasi
+    - panggil updatePassword()
+    - panggil findById() dimasukan ke $result
+    - assertTrue: pastikan harus sama password baru dgn password yg di db
+  }
+  ## testUpdatePasswordValidationError
+  {
+    - bikin objek requestnya, lalu instansiasi dgn string kosong
+    - panggil updatePassword()
+    - expectException: ValidationException. ini ditaro di awal function test ini 
+  }
+  ## testUpdatePasswordWrongOldPassword
+  {
+    - bikin user lalu save
+    - bikin objek requestnya, lalu instansiasi dan salahkan password lama nya
+    - panggil updatePassword()
+    - expectException: ValidationException. ini ditaro di awal function test ini 
+  }
+  ## testUpdatePasswordNotFound
+  {
+    - bikin objek requestnya, lalu instansiasi
+    - panggil updatePassword()
+    - expectException: ValidationException. ini ditaro di awal function test ini 
+  }
+}
+

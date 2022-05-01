@@ -21,7 +21,8 @@ namespace TanzilalGummilang\PHP\LoginManagement\Controller {
   use TanzilalGummilang\PHP\LoginManagement\Config\Database;
   use TanzilalGummilang\PHP\LoginManagement\Domain\Session;
   use TanzilalGummilang\PHP\LoginManagement\Domain\User;
-  use TanzilalGummilang\PHP\LoginManagement\Repository\SessionRepository;
+    use TanzilalGummilang\PHP\LoginManagement\Exception\ValidationException;
+    use TanzilalGummilang\PHP\LoginManagement\Repository\SessionRepository;
   use TanzilalGummilang\PHP\LoginManagement\Repository\UserRepository;
   use TanzilalGummilang\PHP\LoginManagement\Service\SessionService;
   
@@ -199,6 +200,85 @@ namespace TanzilalGummilang\PHP\LoginManagement\Controller {
       $this->expectOutputRegex("[X-PZN-SESSION: ]");
     }
     // end logout test
+
+    // update profile test
+    public function testUpdateProfile()
+    {
+      $user = new User;
+      $user->id = "tanzilal";
+      $user->name = "Tanzilal Gummilang";
+      $user->password = password_hash("rahasia", PASSWORD_BCRYPT);
+      $this->userRepository->save($user);
+
+      $session = new Session;
+      $session->id = uniqid();
+      $session->userId = $user->id;
+      $this->sessionRepository->save($session);
+
+      $_COOKIE[SessionService::$COOKIE_NAME] = $session->id;
+
+      $this->userController->updateProfile();
+
+      $this->expectOutputRegex("[Profile]");
+      $this->expectOutputRegex("[Id]");
+      $this->expectOutputRegex("[$user->id]");
+      $this->expectOutputRegex("[Name]");
+      $this->expectOutputRegex("[$user->name]");
+      $this->expectOutputRegex("[Update Profile]");
+    }
+
+    public function testPostUpdateProfileSuccess()
+    {
+      $user = new User;
+      $user->id = "tanzilal";
+      $user->name = "Tanzilal Gummilang";
+      $user->password = password_hash("rahasia", PASSWORD_BCRYPT);
+      $this->userRepository->save($user);
+
+      $session = new Session;
+      $session->id = uniqid();
+      $session->userId = $user->id;
+      $this->sessionRepository->save($session);
+
+      $_COOKIE[SessionService::$COOKIE_NAME] = $session->id;
+
+      $_POST['name'] = "Gilang";
+      $this->userController->postUpdateProfile();
+
+      $this->expectOutputRegex("[Location: /]");
+
+      $result = $this->userRepository->findById($user->id);
+      $this->assertEquals("Gilang",$result->name);
+    }
+
+    public function testPostUpdateProfileValidationError()
+    {
+      $user = new User;
+      $user->id = "tanzilal";
+      $user->name = "Tanzilal Gummilang";
+      $user->password = password_hash("rahasia", PASSWORD_BCRYPT);
+      $this->userRepository->save($user);
+
+      $session = new Session;
+      $session->id = uniqid();
+      $session->userId = $user->id;
+      $this->sessionRepository->save($session);
+
+      $_COOKIE[SessionService::$COOKIE_NAME] = $session->id;
+
+      $_POST['name'] = "";
+      $this->userController->postUpdateProfile();
+
+      $this->expectOutputRegex("[Profile]");
+      $this->expectOutputRegex("[Id]");
+      $this->expectOutputRegex("[$user->id]");
+      $this->expectOutputRegex("[Name]");
+      $this->expectOutputRegex("[$user->name]");
+      $this->expectOutputRegex("[Update Profile]");
+      $this->expectOutputRegex("[Id or Name cannot blank !!]");
+    }
+    // end update profile test
+
   }
 
 }

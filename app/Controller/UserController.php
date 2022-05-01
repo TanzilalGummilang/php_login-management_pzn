@@ -6,6 +6,7 @@ use TanzilalGummilang\PHP\LoginManagement\App\View;
 use TanzilalGummilang\PHP\LoginManagement\Config\Database;
 use TanzilalGummilang\PHP\LoginManagement\Exception\ValidationException;
 use TanzilalGummilang\PHP\LoginManagement\Model\UserLoginRequest;
+use TanzilalGummilang\PHP\LoginManagement\Model\UserProfileUpdateRequest;
 use TanzilalGummilang\PHP\LoginManagement\Model\UserRegisterRequest;
 use TanzilalGummilang\PHP\LoginManagement\Repository\SessionRepository;
 use TanzilalGummilang\PHP\LoginManagement\Repository\UserRepository;
@@ -89,4 +90,42 @@ class UserController
     View::redirect("/");
   }
   // end logout
+
+  // update profile
+  public function updateProfile()
+  {
+    $user = $this->sessionService->current();
+
+    View::render('User/profile', [
+      'title' => "Update User Profile",
+      'user' => [
+        'id' => $user->id,
+        'name' => $user->name
+      ]
+    ]);
+  }
+
+  public function postUpdateProfile()
+  {
+    $user = $this->sessionService->current();
+
+    $request = new UserProfileUpdateRequest;
+    $request->id = $user->id;
+    $request->name = $_POST['name'];
+
+    try {
+      $this->userService->updateProfile($request);
+      View::redirect('/');
+    }catch(ValidationException $exception){
+      View::render('User/profile', [
+        'title' => "Update User Profile",
+        'error' => $exception->getMessage(),
+        'user' => [
+          'id' => $user->id,
+          'name' => $user->name
+        ]
+      ]);
+    }
+  }
+  // end update profile
 }

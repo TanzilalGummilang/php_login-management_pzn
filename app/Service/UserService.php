@@ -8,6 +8,8 @@ use TanzilalGummilang\PHP\LoginManagement\Domain\User;
 use TanzilalGummilang\PHP\LoginManagement\Exception\ValidationException;
 use TanzilalGummilang\PHP\LoginManagement\Model\UserLoginRequest;
 use TanzilalGummilang\PHP\LoginManagement\Model\UserLoginResponse;
+use TanzilalGummilang\PHP\LoginManagement\Model\UserPasswordUpdateRequest;
+use TanzilalGummilang\PHP\LoginManagement\Model\UserPasswordUpdateResponse;
 use TanzilalGummilang\PHP\LoginManagement\Model\UserProfileUpdateRequest;
 use TanzilalGummilang\PHP\LoginManagement\Model\UserProfileUpdateResponse;
 use TanzilalGummilang\PHP\LoginManagement\Model\UserRegisterRequest;
@@ -120,4 +122,43 @@ class UserService
     }
   }
   // end update profile
+
+  // update password
+  public function updatePassword(UserPasswordUpdateRequest $request): UserPasswordUpdateResponse
+  {
+    $this->validateUserPasswordUpdateRequest($request);
+
+    try{
+      Database::beginTransaction();
+
+      $user = $this->userRepository->findById($request->id);
+      if($user == null){
+        throw new ValidationException("User is not found");
+      }
+      if(!password_verify($request->oldPassword, $user->password)){
+        throw new ValidationException("Old password is wrong");
+      }
+
+      $user->password = password_hash($request->newPassword, PASSWORD_BCRYPT);
+      $this->userRepository->update($user);
+
+      Database::commitTransaction();
+
+      $response = new UserPasswordUpdateResponse;
+      $response->user = $user;
+      return $response;
+
+    }catch(Exception $exception){
+      Database::rollbackTransaction();
+      throw $exception;
+    }
+  }
+
+  private function validateUserPasswordUpdateRequest(UserPasswordUpdateRequest $request)
+  {
+    if($request->id == null or $request->oldPassword == null or $request->newPassword == null or trim($request->id == "") or trim($request->oldPassword == "" or $request->newPassword == "")){
+      throw new ValidationException("Id, Old Password, New Password cannot blank !!");
+    }
+  }
+  // end update password
 }
