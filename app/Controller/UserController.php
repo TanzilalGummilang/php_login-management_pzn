@@ -6,6 +6,7 @@ use TanzilalGummilang\PHP\LoginManagement\App\View;
 use TanzilalGummilang\PHP\LoginManagement\Config\Database;
 use TanzilalGummilang\PHP\LoginManagement\Exception\ValidationException;
 use TanzilalGummilang\PHP\LoginManagement\Model\UserLoginRequest;
+use TanzilalGummilang\PHP\LoginManagement\Model\UserPasswordUpdateRequest;
 use TanzilalGummilang\PHP\LoginManagement\Model\UserProfileUpdateRequest;
 use TanzilalGummilang\PHP\LoginManagement\Model\UserRegisterRequest;
 use TanzilalGummilang\PHP\LoginManagement\Repository\SessionRepository;
@@ -128,4 +129,41 @@ class UserController
     }
   }
   // end update profile
+
+  // update password
+  public function updatePassword()
+  {
+    $user = $this->sessionService->current();
+
+    View::render('User/password', [
+      'title' => "Update User Password",
+      'user' => [
+        'id' => $user->id
+      ]
+    ]);
+  }
+
+  public function postUpdatePassword()
+  {
+    $user = $this->sessionService->current();
+
+    $request = new UserPasswordUpdateRequest;
+    $request->id = $user->id;
+    $request->oldPassword = $_POST['oldPassword'];
+    $request->newPassword = $_POST['newPassword'];
+
+    try{
+      $this->userService->updatePassword($request);
+      View::redirect('/');
+    }catch(ValidationException $exception){
+      View::render('User/password', [
+        'title' => "Update User Password",
+        'error' => $exception->getMessage(),
+        'user' => [
+          'id' => $user->id
+        ]
+      ]);
+    }
+  }
+  // end update password
 }

@@ -225,3 +225,50 @@
   }
 }
 
+# User Password Update Controller {
+  ## updatePassword() {
+    - ini utk tampilan halaman update password
+    - pake view::render, tujuannya ke user/password, kirim data $modelnya dan ambil datanya dari current()
+    - bikin file View User passwordnya nya, copas dari template, dan copas alert message nya
+    - tambah: value id nya ambil dari $model, old dan new password gaperlu
+    - tambahin routenya sekalian aja sm route postUpdatePassword nya juga
+  }
+  ## postUpdatePassword() {
+    - ini utk aksi change passwordnya
+    - pake current(), agar memastikan sudah login dan ambil datanya
+    - bikin objek UserPasswordUpdateRequest dimasukan ke $request. dan 
+    instansiasi id = user->id, oldpassword = post oldpassword, newpassword = post newpassword
+    - try catch.
+    try: updatePassword(), viewredirect ke dashboard
+    catch: validationexception, viewrender nya sama seperti yg updatePassword() tapi ada selipan errornya  
+  }
+}
+
+# unit test User Password Update Controller, UserControllerTest {
+  ## testUpdatePassword() {
+    - bikin user dan save, bikin session dan save, masukan session id ke cookie
+    - panggil updatePassword()
+    - expectOutputRegex: password, id, tanzilal
+  }
+  ## testPostUpdatePasswordSuccess() {
+    - bikin user dan save, bikin session dan save, masukan session id ke cookie
+    - masukan old dan new password dgn method $_post
+    - panggil postUpdatePassword()
+    - expectOutputRegex: location /
+    - verifikasi apakah password sudah berubah, pake findById, masukan ke $result
+    - test pake assertTrue
+  }
+  ## testPostUpdatePasswordValidationError() {
+    - bikin user dan save, bikin session dan save, masukan session id ke cookie
+    - masukan 'string kosong' old dan new password dgn method $_post
+    - panggil postUpdatePassword()
+    - expectOutputRegex: password, id, tanzilal, string validasiexception nya
+  }
+  ## testPostUpdatePasswordWrongOldPassword() {
+    - bikin user dan save, bikin session dan save, masukan session id ke cookie
+    - masukan 'old password yg salah' dan new password dgn method $_post
+    - panggil postUpdatePassword()
+    - expectOutputRegex: password, id, tanzilal, string validasiexception nya
+  }
+
+}
