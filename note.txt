@@ -270,5 +270,10 @@
     - panggil postUpdatePassword()
     - expectOutputRegex: password, id, tanzilal, string validasiexception nya
   }
+}
 
+## periksa semua unit test {
+  ## jika di test semuanya secara langsung akan error karena function header buatannya redeclare, jadi harus di pindahkan ke helper saja
+  ## cookie dummy nya juga sekalian aja pindahin ke helper
+  ## jadi yg tadi udh dipindahin tinggal panggil pake require once
 }
