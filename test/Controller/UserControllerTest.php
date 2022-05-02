@@ -1,31 +1,17 @@
 <?php
 
-namespace TanzilalGummilang\PHP\LoginManagement\App {
-
-  function header(string $value){
-    echo $value;
-  }
-}
-
-namespace TanzilalGummilang\PHP\LoginManagement\Service {
-
-  function setcookie(string $name, string $value)
-  {
-    echo "$name: $value";
-  }
-}
-
 namespace TanzilalGummilang\PHP\LoginManagement\Controller {
+
+  require_once __DIR__ . '/../Helper/helper.php';
 
   use PHPUnit\Framework\TestCase;
   use TanzilalGummilang\PHP\LoginManagement\Config\Database;
   use TanzilalGummilang\PHP\LoginManagement\Domain\Session;
   use TanzilalGummilang\PHP\LoginManagement\Domain\User;
-    use TanzilalGummilang\PHP\LoginManagement\Exception\ValidationException;
-    use TanzilalGummilang\PHP\LoginManagement\Repository\SessionRepository;
+  use TanzilalGummilang\PHP\LoginManagement\Repository\SessionRepository;
   use TanzilalGummilang\PHP\LoginManagement\Repository\UserRepository;
   use TanzilalGummilang\PHP\LoginManagement\Service\SessionService;
-  
+
 
   class UserControllerTest extends TestCase
   {

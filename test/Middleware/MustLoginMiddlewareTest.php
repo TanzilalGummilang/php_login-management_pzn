@@ -1,13 +1,8 @@
 <?php
 
-namespace TanzilalGummilang\PHP\LoginManagement\App {
-
-  function header(string $value){
-    echo $value;
-  }
-}
-
 namespace TanzilalGummilang\PHP\LoginManagement\Middleware {
+
+  require_once __DIR__ . '/../Helper/helper.php';
 
   use PHPUnit\Framework\TestCase;
   use TanzilalGummilang\PHP\LoginManagement\Config\Database;

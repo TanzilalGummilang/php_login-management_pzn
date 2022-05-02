@@ -2,17 +2,14 @@
 
 namespace TanzilalGummilang\PHP\LoginManagement\Service;
 
+require_once __DIR__ . '/../Helper/helper.php';
+
 use PHPUnit\Framework\TestCase;
 use TanzilalGummilang\PHP\LoginManagement\Config\Database;
 use TanzilalGummilang\PHP\LoginManagement\Domain\Session;
 use TanzilalGummilang\PHP\LoginManagement\Domain\User;
 use TanzilalGummilang\PHP\LoginManagement\Repository\SessionRepository;
 use TanzilalGummilang\PHP\LoginManagement\Repository\UserRepository;
-
-function setcookie(string $name, string $value)
-{
-  echo "$name: $value";
-}
 
 
 class SessionServiceTest extends TestCase
