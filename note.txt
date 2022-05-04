@@ -1,3 +1,29 @@
+# Arsitektur Aplikasi {
+  ## istilah lain: struktur project, software design
+  ## bikin pake diagram puml
+  ## catatan architecture.puml {
+    - biasanya logic mengambil data dari database dsb terdapat di controller atau ada beberapa pattern yg melakukan di model. ini terlalu kompleks dan controllernya jadi akan central logic.
+    - jadi dibuatkan 2 layer lagi, yaitu: service dan repository
+    - 'user' nembak ke 'controller' yg bentuknya 'model' yg datanya diambil dari 'user'
+    - 'controller' mengirimkan data requestnya ke 'service'
+    - 'service' yg akan mengelola logicnya, dan biasanya akan berhubungan dgn database, jadi 'controller' menerima request dari 'user' lalu mengirim ke service
+    - biar lebih mudah jadi kita akan implementasi repository pattern.
+    - jadi 'service' akan nembak ke 'repository', lalu 'repository' akan panggil 'database (mysql)'.
+    - jadi logic nya tidak akan berpusat di 'controller'
+    - ada 2 jenis model, yaitu: 'model' dan 'domain'. domain adalah  representasi tabel dari database. dan ini akan digunakan oleh 'repository'.
+    - urutannya {
+      1. user manggil controller
+      2. controller mengambil data model nya
+      3. controller mengirim data model nya ke service
+      4. service mengirim data ke repository
+      5. repository menggunakan data domain
+      6. repository akan menggunakan domain tsb utk mengirim data ke database (mysql)
+      7. selajutnya balik lagi ke controller dan hasil prosesnya dikirimkan ke view
+      8. lalu dibalikan lagi ke user melalui controller
+    }
+  }
+}
+
 # Controller {
   ## menerima request dari user dan menyampaikan ke model dan service
   ## lalu mengembalikan response ke user dgn tampilan dari view 
