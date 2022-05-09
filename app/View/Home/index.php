@@ -3,7 +3,7 @@
     
     <div class="col-lg-7 text-center text-lg-start">
       <h1 class="display-4 fw-bold lh-1 mb-3">Login Management</h1>
-      <p class="col-lg-10 fs-4">by <a target="_blank" href="https://www.programmerzamannow.com/">Programmer Zaman Now</a></p>
+      <p class="col-lg-10 fs-4">by <a target="_blank" href="https://github.com/TanzilalGummilang">Tanzilal Gummilang</a></p>
     </div>
 
     <div class="col-md-10 mx-auto col-lg-5">
