@@ -303,3 +303,29 @@
   ## cookie dummy nya juga sekalian aja pindahin ke helper
   ## jadi yg tadi udh dipindahin tinggal panggil pake require once
 }
+
+# Local Domain dan Apache HTTPD {
+  ## bikin local domain {
+    - C:\Windows\System32\drivers\etc\hosts
+    - save sebagai administrator
+    - contohnya:
+      127.0.0.1 pzn_php-login-management.tanzilal
+  }
+  ## bikin vhost {
+    - xampp\apache\conf\extra\httpd-vhost.conf
+    - copas dari yg sebelumnya jika ada atau dummy yg di atasnya, sesuaikan nama-nama nya
+    - contohnya:
+      <VirtualHost php-login-management.tanzilal:80>
+        ServerAdmin admin@pzn_php-login-management.tanzilal
+        DocumentRoot "C:/xampp/htdocs/tg/php-login-management/public"
+        ServerName php-login-management.tanzilal
+        ErrorLog "logs/php-login-management.tanzilal.error.log"
+        CustomLog "logs/php-login-management.tanzilal-access.log" common
+      </VirtualHost>
+  }
+  ## setelah beres restart xampp nya
+  ## pada vhost DocumentRoot di bagian akhirnya 'public', ini dilakukan agar hanya folder public yg bisa diakses
+  ## bisa mengetikan nama local domain co: 'project-01.tanzilal' di url browser utk buka project
+  ## lalu jika error copas .htaccess masukan ke public
+  ## langkah2 diatas sepertinya harus dilakukan (jika pake xampp), karena jika tidak dilakukan dan ingin membuka project ini langsung melalui url browser http://localhost/namafile...bla...bla/public, fiturnya tidak akan jalan (saya juga tidak tau kenapa dan sedang caritau kenapa hehe..). jadi lakukan bikin local domain dan vhostnya sesuaikan nama2nya sesuai kebutuhan tidak harus sama persis seperti yg diatas
+}
